@@ -48,7 +48,7 @@ The project consists of two main parts:
    - Product listing page, product addition form, and other necessary features.
 
 3. **Hosting**:
-   - Both the frontend and backend are hosted as per the instructions.
+   - Both the frontend and backend are hosted as per the instructions.you can view the App here:# code-tribe-marketplace.vercel.app
 
    # Design
 The design for EasyBuy was created using Figma. You can view the design [here](https://www.figma.com/design/uxZRatIhSu78aeAlkmJTra/Untitled?node-id=0-1&t=jQVEfgFxATaEVVdw-1).
