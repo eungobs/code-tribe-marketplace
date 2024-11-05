@@ -1,4 +1,3 @@
-// src/frontend/components/Profile.js
 import React, { useEffect, useState } from 'react';
 import { auth, db } from '../firebaseConfig'; // Ensure correct path for firebaseConfig
 import { doc, getDoc } from 'firebase/firestore';
@@ -11,13 +10,17 @@ const Profile = () => {
     const fetchUserData = async () => {
       if (auth.currentUser) {
         const uid = auth.currentUser.uid;
-        const docRef = doc(db, 'users', uid);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists()) {
-          setUserData(docSnap.data());
-        } else {
-          console.log("No such document!");
+        const docRef = doc(db, 'users', uid); // Fetch user data based on UID
+        try {
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            setUserData(docSnap.data());
+          } else {
+            console.log("No such document found!");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
         }
       }
       setLoading(false);
@@ -35,7 +38,11 @@ const Profile = () => {
       <h2>User Profile</h2>
       {userData ? (
         <div>
-          <img src={localStorage.getItem('userImage')} alt="User" style={{ width: '100px', height: '100px' }} />
+          <img
+            src={localStorage.getItem('userImage') || userData.photoURL} // Assuming 'photoURL' is the Firestore field for the image
+            alt="User"
+            style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+          />
           <p><strong>Name:</strong> {userData.name}</p>
           <p><strong>Surname:</strong> {userData.surname}</p>
           <p><strong>Identity Number:</strong> {userData.identityNumber}</p>
@@ -51,5 +58,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-

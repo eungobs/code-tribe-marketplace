@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Radio, RadioGroup, FormControl, FormControlLabel, FormLabel } from '@mui/material';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../firebaseConfig';
+import { auth, firestoreDb } from '../firebaseConfig'; // Import the correct Firestore instance
 import { setDoc, doc } from 'firebase/firestore';
 
 const SignupForm = ({ closeModal }) => {
@@ -12,8 +12,8 @@ const SignupForm = ({ closeModal }) => {
   const [identityNumber, setIdentityNumber] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
-  const [image, setImage] = useState(null); // State to hold image
   const [error, setError] = useState('');
+  const [role, setRole] = useState('user'); // Default role set to "user"
 
   const handleSignup = async () => {
     // Input validations
@@ -40,7 +40,7 @@ const SignupForm = ({ closeModal }) => {
       
       // Prepare user data for Firestore
       const userData = {
-        role: 'vendor',
+        role,
         name,
         surname,
         identityNumber,
@@ -49,13 +49,7 @@ const SignupForm = ({ closeModal }) => {
       };
 
       // Store user data in Firestore
-      await setDoc(doc(db, 'users', userCredential.user.uid), userData);
-
-      // Handle image upload logic if an image is selected
-      if (image) {
-        console.log('Image to upload:', image);
-        // Your image upload logic here (e.g., uploading to Firebase Storage)
-      }
+      await setDoc(doc(firestoreDb, 'users', userCredential.user.uid), userData); // Use firestoreDb
 
       closeModal();
     } catch (error) {
@@ -64,17 +58,25 @@ const SignupForm = ({ closeModal }) => {
     }
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file); // Update the image state with the selected file
-    }
-  };
-
   return (
     <div>
       <h2>Signup</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      
+      <FormControl component="fieldset" margin="normal">
+        <FormLabel component="legend">Register as:</FormLabel>
+        <RadioGroup
+          row
+          aria-label="role"
+          name="role"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <FormControlLabel value="user" control={<Radio />} label="User" />
+          <FormControlLabel value="seller" control={<Radio />} label="Seller" />
+        </RadioGroup>
+      </FormControl>
+      
       <TextField
         fullWidth
         label="Name"
@@ -125,16 +127,9 @@ const SignupForm = ({ closeModal }) => {
         onChange={(e) => setPassword(e.target.value)}
         margin="normal"
       />
-      <input
-        type="file"
-        accept="image/*" // Accepts only image files
-        onChange={handleImageChange} // Calls the handler on file selection
-      />
       <Button variant="contained" onClick={handleSignup} fullWidth>Signup</Button>
     </div>
   );
 };
 
 export default SignupForm;
-
-
