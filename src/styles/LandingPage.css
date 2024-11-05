@@ -1,0 +1,79 @@
+/* Make the container take full height */
+.full-height-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header alignment */
+.header-icons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Main content area to grow and take available space */
+.main-content {
+  flex-grow: 1;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Logo styling for EasyBuy */
+.logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: darkgreen;
+  text-decoration: underline;
+  margin: 0;
+  z-index: 1;
+}
+
+/* Styling for Today's Special */
+.special-sale {
+  font-size: 2rem;
+  font-weight: bold;
+  color: red;
+  text-shadow: 1px 1px white;
+  animation: blink 1.5s step-start infinite;
+  margin-bottom: 20px;
+}
+
+/* Blinking effect */
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Footer styling */
+.footer {
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Seller Portal link styling in footer */
+.seller-portal-link {
+  color: white;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+}
+
