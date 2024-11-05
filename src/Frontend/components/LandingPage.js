@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { Button, Modal, Badge } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { db } from '../firebaseConfig'; // Ensure this points to your firebase config
+import { ref, get } from 'firebase/database';
 import '../../styles/LandingPage.css';
 
 const LandingPage = () => {
@@ -13,31 +17,68 @@ const LandingPage = () => {
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
-  const [userData, setUserData] = useState(null); // State to hold user data
+  const [userData, setUserData] = useState(null);
+  const [products, setProducts] = useState([]); // State to hold product data
+  const [quantities, setQuantities] = useState({}); // State to hold product quantities
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch user data from local storage or any source
+    // Fetch user data from local storage
     const storedUserData = {
       name: localStorage.getItem('userName'),
       surname: localStorage.getItem('userSurname'),
       email: localStorage.getItem('userEmail'),
-      // Add other fields as necessary
     };
     setUserData(storedUserData);
+
+    // Fetch products from Firebase
+    fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const snapshot = await get(ref(db, 'products')); // Change 'products' to your database structure
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const productsArray = Object.keys(data).map((id) => ({
+          id,
+          ...data[id],
+        }));
+        setProducts(productsArray);
+
+        // Initialize quantities
+        const initialQuantities = {};
+        productsArray.forEach(product => {
+          initialQuantities[product.name] = 0; // Set initial quantity to 0 for each product
+        });
+        setQuantities(initialQuantities);
+      } else {
+        console.log('No products available.');
+      }
+    } catch (error) {
+      console.error('Error fetching products: ', error);
+    }
+  };
 
   const handleOpenLogin = () => setOpenLogin(true);
   const handleCloseLogin = () => setOpenLogin(false);
-
   const handleOpenSignup = () => setOpenSignup(true);
   const handleCloseSignup = () => setOpenSignup(false);
-
   const handleOpenProfile = () => setOpenProfile(true);
   const handleCloseProfile = () => setOpenProfile(false);
 
-  const addToCart = () => {
-    setCartCount(prevCount => prevCount + 1);
+  const addToCart = (product) => {
+    const newQuantities = { ...quantities, [product.name]: quantities[product.name] + 1 };
+    setQuantities(newQuantities);
+    setCartCount(cartCount + 1);
+  };
+
+  const removeFromCart = (product) => {
+    if (quantities[product.name] > 0) {
+      const newQuantities = { ...quantities, [product.name]: quantities[product.name] - 1 };
+      setQuantities(newQuantities);
+      setCartCount(cartCount - 1);
+    }
   };
 
   const navigateToSellerPortal = () => {
@@ -53,7 +94,6 @@ const LandingPage = () => {
         <Badge
           badgeContent={cartCount}
           color="secondary"
-          onClick={addToCart}
           className="cart-icon"
         >
           <ShoppingCartIcon />
@@ -67,7 +107,29 @@ const LandingPage = () => {
         <h1 className="logo">EasyBuy</h1>
         <h2 className="special-sale">Today's Special Sale</h2>
         <Row>
-          {/* Product listing goes here */}
+          {products.map((product) => (
+            <Col key={product.id} md={4} className="mb-4">
+              <div className="product-card">
+                <img src={product.image} alt={product.name} className="product-image" />
+                <h3>{product.name}</h3>
+                <p>Price: R{product.price}</p>
+                <p>{product.description}</p>
+                <div className="quantity-controls">
+                  <Button
+                    variant="outlined"
+                    onClick={() => removeFromCart(product)}
+                    disabled={quantities[product.name] === 0}
+                  >
+                    <RemoveIcon />
+                  </Button>
+                  <span>{quantities[product.name]}</span>
+                  <Button variant="outlined" onClick={() => addToCart(product)}>
+                    <AddIcon />
+                  </Button>
+                </div>
+              </div>
+            </Col>
+          ))}
         </Row>
 
         <Modal open={openLogin} onClose={handleCloseLogin}>
@@ -90,25 +152,14 @@ const LandingPage = () => {
                 <p><strong>Name:</strong> {userData.name}</p>
                 <p><strong>Surname:</strong> {userData.surname}</p>
                 <p><strong>Email:</strong> {userData.email}</p>
-                {/* Add more user details as necessary */}
               </div>
             ) : (
               <p>No user data available.</p>
             )}
           </div>
         </Modal>
-
-        <Button
-          variant="contained"
-          color="primary"
-          className="add-to-cart-btn"
-          onClick={addToCart}
-        >
-          Add to Cart
-        </Button>
       </div>
 
-      {/* Footer Section with Seller Portal Link */}
       <footer className="footer">
         © 2024 EasyBuy. All Rights Reserved.
         <Button
@@ -123,6 +174,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-
-
-

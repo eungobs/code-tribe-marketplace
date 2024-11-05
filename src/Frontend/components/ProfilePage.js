@@ -22,6 +22,8 @@ const Profile = () => {
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
+      } else {
+        console.log("No user is currently logged in.");
       }
       setLoading(false);
     };
@@ -38,17 +40,18 @@ const Profile = () => {
       <h2>User Profile</h2>
       {userData ? (
         <div>
+          {/* Conditional rendering for image display */}
           <img
-            src={localStorage.getItem('userImage') || userData.photoURL} // Assuming 'photoURL' is the Firestore field for the image
+            src={userData.photoURL || localStorage.getItem('userImage') || 'https://via.placeholder.com/100'} // Placeholder image if no photoURL
             alt="User"
             style={{ width: '100px', height: '100px', borderRadius: '50%' }}
           />
           <p><strong>Name:</strong> {userData.name}</p>
           <p><strong>Surname:</strong> {userData.surname}</p>
-          <p><strong>Identity Number:</strong> {userData.identityNumber}</p>
+          <p><strong>Email:</strong> {auth.currentUser.email}</p>
           <p><strong>Phone Number:</strong> {userData.phoneNumber}</p>
           <p><strong>Address:</strong> {userData.address}</p>
-          <p><strong>Email:</strong> {auth.currentUser.email}</p>
+          <p><strong>Role:</strong> {userData.role}</p> {/* Display user role */}
         </div>
       ) : (
         <p>No user data found.</p>
@@ -58,3 +61,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

@@ -11,6 +11,7 @@ const SellerPortal = () => {
   const [uploading, setUploading] = useState(false);
   const [products, setProducts] = useState([]);
   const [editProductId, setEditProductId] = useState(null); // Track if editing a product
+  const [priceError, setPriceError] = useState(false); // Track price validation error
 
   useEffect(() => {
     fetchProducts();
@@ -43,9 +44,19 @@ const SellerPortal = () => {
   const handleAddOrUpdateProduct = async () => {
     try {
       setUploading(true);
+      
+      // Validate price before proceeding
+      const parsedPrice = parseFloat(price);
+      if (isNaN(parsedPrice)) {
+        alert("Please enter a valid price.");
+        setPriceError(true);
+        setUploading(false);
+        return; // Exit early if the price is not valid
+      }
+
       const productData = {
         name: productName,
-        price: parseFloat(price),
+        price: parsedPrice, // Use the parsed price here
         description,
         image: image || ""
       };
@@ -65,6 +76,7 @@ const SellerPortal = () => {
       setPrice('');
       setDescription('');
       setImage(null);
+      setPriceError(false); // Reset price error
       fetchProducts(); // Refresh product list
     } catch (error) {
       console.error("Error adding/updating product: ", error);
@@ -83,6 +95,7 @@ const SellerPortal = () => {
 
   const handleDeleteProduct = async (productId) => {
     try {
+      console.log(`Attempting to delete product with ID: ${productId}`); // Debugging log
       await remove(dbRef(db, `products/${productId}`));
       fetchProducts(); // Refresh product list
     } catch (error) {
@@ -103,7 +116,12 @@ const SellerPortal = () => {
         <TextField 
           label="Price" 
           value={price} 
-          onChange={(e) => setPrice(e.target.value)} 
+          onChange={(e) => {
+            setPrice(e.target.value);
+            setPriceError(false); // Reset error when user changes input
+          }} 
+          error={priceError}
+          helperText={priceError ? "Invalid price!" : ""}
           fullWidth 
         />
         <TextField 
@@ -158,4 +176,5 @@ const SellerPortal = () => {
 };
 
 export default SellerPortal;
+
 
