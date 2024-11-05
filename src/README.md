@@ -50,6 +50,10 @@ The project consists of two main parts:
 3. **Hosting**:
    - Both the frontend and backend are hosted as per the instructions.
 
+   # Design
+The design for EasyBuy was created using Figma. You can view the design [here](https://www.figma.com/design/uxZRatIhSu78aeAlkmJTra/Untitled?node-id=0-1&t=jQVEfgFxATaEVVdw-1).
+
+
 ## Installation Instructions
 To run this project locally, follow these steps:
 
@@ -75,14 +79,4 @@ Install dependencies:
 npm install
 Start the application:
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-Contact
-For any questions or inquiries, please contact [your email or GitHub profile link].
-
-
-### Instructions for Use
-- Replace `<your-repo-url>` with the actual URL of your GitHub repository.
-- Fill in your contact information at the bottom.
-- Feel free to add more sections if you have additional features or notes you want to include.
+npm start
