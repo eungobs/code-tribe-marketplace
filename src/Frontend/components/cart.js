@@ -1,8 +1,17 @@
-import React from 'react';
+// src/Frontend/components/cart.js
+import React, { createContext, useContext, useState } from 'react';
 
-const Cart = () => {
-  // Manage cart items and checkout functionality
-  return <div>Cart Component</div>;
+const CartContext = createContext();
+
+export const CartProvider = ({ children }) => {
+  const [cartItems, setCartItems] = useState({});
+
+  return (
+    <CartContext.Provider value={{ cartItems, setCartItems }}>
+      {children}
+    </CartContext.Provider>
+  );
 };
 
-export default Cart;
+export const useCart = () => useContext(CartContext);
+

@@ -18,26 +18,23 @@ const LandingPage = () => {
   const [openSignup, setOpenSignup] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [products, setProducts] = useState([]); // State to hold product data
-  const [quantities, setQuantities] = useState({}); // State to hold product quantities
+  const [products, setProducts] = useState([]);
+  const [quantities, setQuantities] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch user data from local storage
     const storedUserData = {
       name: localStorage.getItem('userName'),
       surname: localStorage.getItem('userSurname'),
       email: localStorage.getItem('userEmail'),
     };
     setUserData(storedUserData);
-
-    // Fetch products from Firebase
     fetchProducts();
   }, []);
 
   const fetchProducts = async () => {
     try {
-      const snapshot = await get(ref(db, 'products')); // Change 'products' to your database structure
+      const snapshot = await get(ref(db, 'products'));
       if (snapshot.exists()) {
         const data = snapshot.val();
         const productsArray = Object.keys(data).map((id) => ({
@@ -46,10 +43,9 @@ const LandingPage = () => {
         }));
         setProducts(productsArray);
 
-        // Initialize quantities
         const initialQuantities = {};
         productsArray.forEach(product => {
-          initialQuantities[product.name] = 0; // Set initial quantity to 0 for each product
+          initialQuantities[product.name] = 0;
         });
         setQuantities(initialQuantities);
       } else {
@@ -81,8 +77,24 @@ const LandingPage = () => {
     }
   };
 
+  const navigateToCart = () => {
+    const cartItems = products
+      .filter(product => quantities[product.name] > 0)
+      .map(product => ({
+        name: product.name,
+        price: product.price,
+        quantity: quantities[product.name],
+        id: product.id,
+        image: product.image // Ensure image is included
+      }));
+    const totalPrice = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+    navigate('/viewcart', { state: { cartItems, totalPrice } });
+  };
+
+  // Function to navigate to Seller Portal
   const navigateToSellerPortal = () => {
-    navigate('/sellerportal');
+    navigate('/seller-portal');
   };
 
   return (
@@ -95,6 +107,7 @@ const LandingPage = () => {
           badgeContent={cartCount}
           color="secondary"
           className="cart-icon"
+          onClick={navigateToCart}
         >
           <ShoppingCartIcon />
         </Badge>
