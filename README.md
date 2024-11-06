@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+# EasyBuy
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
+EasyBuy is an online marketplace designed specifically for farmers and vendors. The platform allows farmers to register as sellers and post their products for sale. Vendors can register as users to stock up on products from farmers, streamlining the process of sourcing goods for their businesses. This application aims to save vendors time and costs, allowing them to arrive at their selling spots earlier.
 
-## Available Scripts
+## Project Structure
+The project consists of two main parts:
+1. **Backend (NodeJS)**: A RESTful API that handles user authentication, product management, and order processing.
+2. **Frontend (ReactJS)**: A user-friendly interface allowing farmers to sell their products and vendors to purchase them.
 
-In the project directory, you can run:
+## Technologies Used
+- **Backend**: 
+  - NodeJS
+  - Express
+  - JWT for authentication
+  - Mongoose/MongoDB for database management
+- **Frontend**:
+  - ReactJS
+  - Axios for API requests
+  - Redux for state management
+- **Version Control**: Git (hosted on GitHub)
+- **Database**: MongoDB/Firebase
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### User Registration
+- Users can choose to register as either a **Seller** (Farmer) or a **User** (Vendor) during the signup process.
+- Each role has different functionalities once logged in.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Farmer Features
+- **Post Products**: Farmers can list their products for sale on the marketplace.
+- **Update Products**: Farmers can update the details of their listed products.
+- **Delete Products**: Farmers can remove their products from the marketplace.
 
-### `npm test`
+### Vendor Features
+- **Stock Products**: Vendors can browse and stock products from registered farmers.
+- **Delivery Arrangements**: Farmers can arrange for delivery to the vendor's registered address, facilitating easier transactions.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Deliverables
+1. **NodeJS Backend**:
+   - Fully functional REST API hosted on a server.
+   - Clear API documentation (README or Swagger) detailing how to interact with the API.
+   - Database setup and connection script included in the README.
 
-### `npm run build`
+2. **ReactJS Frontend**:
+   - A simple, responsive web application that communicates with the backend.
+   - User-friendly login and registration pages for both farmers and vendors.
+   - Product listing page, product addition form, and other necessary features.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. **Hosting**:
+   - Both the frontend and backend are hosted as per the instructions.you can view the App here:# code-tribe-marketplace.vercel.app
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   # Design
+The design for EasyBuy was created using Figma. You can view the design [here](https://www.figma.com/design/uxZRatIhSu78aeAlkmJTra/Untitled?node-id=0-1&t=jQVEfgFxATaEVVdw-1).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## Installation Instructions
+To run this project locally, follow these steps:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Backend
+1. Clone the repository:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   git clone https://github.com/eungobs/code-tribe-marketplace.git
+Navigate to the backend directory:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+cd backend
+Install dependencies:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+npm install
+Set up your MongoDB database and connection in the configuration files.
+Start the server:
 
-## Learn More
+Frontend
+Navigate to the frontend directory:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+cd frontend
+Install dependencies:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+npm install
+Start the application:
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+npm start
